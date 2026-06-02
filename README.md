@@ -9,7 +9,7 @@ Deleted ColorOS Temperature wall
 
 Toggle ADB for ColorOS
 
-disabled ADB when booting
+Disabled ADB when booting
 
 >Config
 
