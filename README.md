@@ -1,7 +1,8 @@
 # Trigger
 A Trigger module for Magisk/KernelSU/Apatch
 
-#Config
+>>Config
+
 Path:/data/adb/.Magic/Trigger/kernel_config.txt
 
 Easy to use like
