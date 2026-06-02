@@ -1,0 +1,10 @@
+# coloros禁用温控与解除限制
+persist.sys.horae.enable=0
+ro.oplus.audio.thermal_control=0
+ro.oplus.radio.hide_nr_switch=0
+oplus.dex.tempcontrol=false
+dalvik.vm.dexopt.thermal-cutoff=0
+sys.thermal.enable=false
+init.svc.horae=stopped
+persist.vendor.enable.cpulimit=false
+persist.sys.oplus.wifi.sla.game_high_temperature=
