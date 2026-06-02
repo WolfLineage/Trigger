@@ -9,6 +9,7 @@ Easy to use like
 $APP_PKG=$PATH=$INPUT
 
 >Example:
+
 #################################################
 
 com.tencent.tmgp.dfm=/data/adb/kernel.sh=1\n2\n
