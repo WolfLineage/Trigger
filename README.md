@@ -1,6 +1,13 @@
 # Trigger
 A Trigger module for Magisk/KernelSU/Apatch
 
+>Functions
+
+AutoTrigger shell monitor
+Deleted ColorOS Temperature wall
+Toggle ADB for ColorOS
+disabled ADB when booting
+
 >Config
 
 Path:/data/adb/.Magic/Trigger/kernel_config.txt
