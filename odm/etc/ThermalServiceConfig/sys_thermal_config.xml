@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filter-conf>
+    <version>2018101710</version>
+    <isOpen>0</isOpen>
+    <filter-name>sys_thermal_config</filter-name>
+    <more_heat_threshold>0</more_heat_threshold>
+    <heat_threshold>0</heat_threshold>
+    <less_heat_threshold>0</less_heat_threshold>
+    <preheat_threshold>0</preheat_threshold>
+    <heat_hold_upload_time>0</heat_hold_upload_time>
+    <heat_align>0</heat_align>
+    <is_feature_on>0</is_feature_on>
+    <is_upload_dcs>0</is_upload_dcs>
+    <is_upload_log>0</is_upload_log>
+    <is_upload_errlog>0</is_upload_errlog>
+    <preheat_dex_oat_threshold>0</preheat_dex_oat_threshold>
+    <!-- 30min -->
+    <heathold_time_threshold>2800000</heathold_time_threshold>
+    <thermal_heat_path>/sys/class/thermal/thermal_zone84/temp</thermal_heat_path>
+    <thermal_battery_temp>0</thermal_battery_temp>
+    <thermal_monitor_application>
+        com.tencent.tmgp.pubgmhd,
+        com.tencent.tmgp.sgame,
+        com.ss.android.ugc.aweme,
+        com.smile.gifmaker,
+        com.tencent.tmgp.pubgm 
+    </thermal_monitor_application>
+    <thermal_monitor_app_limit_time>2200000</thermal_monitor_app_limit_time>
+</filter-conf>
