@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100%;
+            background: rgb(50, 50, 50);
+            font-family: -apple-system, sans-serif;
+            display: grid;
+            place-items: center;
+            color: rgb(100, 100, 100);
+        }
+
+        h1 {
+            text-align: center;
+            color: rgb(255, 200, 0);
+            text-shadow: 0 0 10px;
+        }
+
+        .glass-card {
+            width: 90vw;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            cursor: pointer;
+            background: rgb(255 200 0);
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            outline: white;
+            font-size: 16px;
+            color: rgb(255, 255, 255);
+            box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button:active {
+            scale: 0.99;
+            background: rgba(255, 200, 0, 0.7);
+        }
+
+        textarea {
+            width: 100%;
+            height: 40vh;
+            padding: 20px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(30, 30, 30, 0.5);
+            color: rgba(255, 200, 0, 0.9);
+            font-family: -apple-system, sans-serif;
+            resize: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 16px rgba(255, 200, 0, 0.2);
+        }
+
+        textarea:hover {
+            box-shadow: 0 0 24px rgba(255, 200, 0, 0.3);
+        }
+
+        textarea::selection {
+            color: rgba(255, 200, 0, 0.8);
+            background: rgba(100, 100, 100, 0.8);
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="glass-card">
+        <h1><b>-| 配置页 |-</b></h1>
+        <br>
+        <textarea class="multi-line-input" placeholder="格式:$PKG=$PATH=$INPUT (回车用\n)&#10;最后一行不加空格或#注释无法正常读取"></textarea>
+        <br>
+        <div style="flex: 1; gap:5vw; display: flex; justify-content: space-between;">
+            <button onclick="loadConfig()">加载</button>
+            <button onclick="saveConfig()">保存</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { exec, toast } from 'https://esm.sh/kernelsu';
+
+        const CONFIG_PATH = '/data/adb/.Magic/Trigger/kernel_config.txt';
+        const textarea = document.querySelector('textarea');
+
+        // Base64 编解码
+        const encode = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+        const decode = base64 => {
+            try {
+                const binary = atob(base64.trim());
+                return new TextDecoder().decode(new Uint8Array([...binary].map(c => c.charCodeAt(0))));
+            } catch { return null; }
+        };
+
+        window.loadConfig = async () => {
+            const { stdout } = await exec(`cat "${CONFIG_PATH}" 2>/dev/null | base64 -w 0`);
+            if (stdout?.trim()) {
+                const decoded = decode(stdout.trim());
+                if (decoded !== null) {
+                    textarea.value = decoded;
+                    toast('加载成功');
+                    return;
+                }
+            }
+            textarea.value = '';
+            toast('文件为空或不存在');
+        };
+
+        window.saveConfig = async () => {
+            const content = textarea.value;
+            if (!content.trim()) { toast('内容不能为空', true); return; }
+
+            const { stdout } = await exec(`mkdir -p "$(dirname ${CONFIG_PATH})" && echo -n "${encode(content)}" | base64 -d > "${CONFIG_PATH}" && echo OK`);
+
+            if (stdout?.includes('OK')) {
+                toast('保存成功');
+            } else {
+                toast('保存失败', true);
+            }
+        };
+
+        // 页面加载时自动读取
+        window.addEventListener('DOMContentLoaded', loadConfig);
+    </script>
+</body>
+</html>
