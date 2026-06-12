@@ -21,7 +21,7 @@ Easy to use like
 
 $APP_PKG=$PATH=$INPUT
 
-✅Example:
+✅Example
 
 #################################################
 
