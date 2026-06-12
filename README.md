@@ -1,17 +1,17 @@
 # Trigger
 🥑A Trigger module for Magisk/KernelSU/Apatch🥑
 
->🌈Functions
+🌈>Functions
 
-AutoTrigger shell monitor
+🎉AutoTrigger shell monitor
 
-Delete ColorOS Temperature wall
+🎉Delete ColorOS Temperature wall
 
-Toggle ADB for ColorOS
+🎉Toggle ADB for ColorOS
 
-Disable ADB when booting
+🎉Disable ADB when booting
 
->⚡Config
+⚡>Config
 
 Path:/data/adb/.Magic/Trigger/kernel_config.txt
 
@@ -21,7 +21,7 @@ Easy to use like
 
 $APP_PKG=$PATH=$INPUT
 
->✅Example:
+✅>Example:
 
 #################################################
 
