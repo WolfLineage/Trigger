@@ -11,26 +11,43 @@
         <button class="theme-toggle" onclick="toggleTheme()">☀️️</button>
     </div>
     <div class="topnav">
-        <a href="#" onclick="switchPage('config')">配置</a>
-        <a href="#" onclick="switchPage('changebox')">改机型</a>
-        <a href="#" onclick="switchPage('about')">关于</a>
+        <div class="nav-indicator"></div>
+        <a href="#" class="nav-item active" onclick="switchPage('config', this)">自启配置</a>
+        <a href="#" class="nav-item" onclick="switchPage('bootconfig', this)">开机配置</a>
+        <a href="#" class="nav-item" onclick="switchPage('changebox', this)">改机型</a>
+        <a href="#" class="nav-item" onclick="switchPage('about', this)">关于</a>
     </div>
 
-    <!-- 配置页面 -->
+    <!-- 自启配置页面 -->
     <div id="config-page" class="page-content active">
         <div class="main card">
-            <h2>-配置编辑-</h2>
-            <textarea placeholder="输入配置内容..."></textarea>
+            <h2>-自启配置编辑-</h2>
+            <textarea placeholder="输入自启配置内容...
+格式：包名=脚本路径=输入内容"></textarea>
             <div style=" display: flex; justify-content: space-between; width: 95%;">
                 <button class="plugin-buttons">加载</button>
                 <button class="plugin-buttons">保存</button>
             </div>
         </div>
         <div class="footer">
+            <div id="core-card" class="info card info-full">自启核心加载中...</div>
             <div id="battery-card" class="info card">电池信息</div>
             <div id="brand-card" class="info card">设备品牌</div>
             <div id="fingerprint-card" class="info card">设备指纹</div>
             <div id="sn-card" class="info card">序列号</div>
+        </div>
+    </div>
+
+    <!-- 开机配置页面 -->
+    <div id="bootconfig-page" class="page-content">
+        <div class="main card">
+            <h2>-开机配置编辑-</h2>
+            <textarea placeholder="输入开机配置内容...
+格式：脚本路径=输入内容"></textarea>
+            <div style=" display: flex; justify-content: space-between; width: 95%;">
+                <button class="plugin-buttons">加载</button>
+                <button class="plugin-buttons">保存</button>
+            </div>
         </div>
     </div>
 

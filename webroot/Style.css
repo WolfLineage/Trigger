@@ -15,6 +15,7 @@
     --vp-c-button: #80c583;
     --vp-c-button-text: #ffffff;
     --vp-c-textarea: #0F346080;
+    --vp-c-shadow: rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="light"] {
@@ -26,13 +27,14 @@
     --vp-c-border: #a0adbb;
     --vp-c-button: #388e3c;
     --vp-c-textarea: #eceff2;
+    --vp-c-shadow: rgba(0, 0, 0, 0.2);
 }
 
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100svw;
+    width: 100%;
     min-height: 100svh;
     background: var(--vp-c-bg);
     color: var(--vp-c-text);
@@ -44,7 +46,7 @@ body {
     top: 0;
     display: flex;
     justify-content: space-between;
-    width: 100svw;
+    width: 100%;
     height: 48px;
     z-index: 1000;
     background: var(--vp-c-header);
@@ -53,16 +55,50 @@ body {
 
 .topnav {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     position: absolute;
     top: 56px;
     width: 95%;
-    height: 36px;
-    margin: 0 auto;
+    left: 2.5%;
+    height: 38px;
     background: var(--vp-c-card);
-    border-radius: 15px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 0 8px var(--vp-c-shadow);
+    padding: 4px;
+    overflow: hidden;
+}
+
+.nav-item {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    text-decoration: none;
+    color: var(--vp-c-text);
+    margin: 0 !important;
+}
+
+.nav-item.active {
+    color: var(--vp-c-button-text);
+}
+
+.nav-indicator {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    height: calc(100% - 8px);
+    background: var(--vp-c-button);
+    border-radius: 8px;
+    z-index: 1;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .page-content {
@@ -111,7 +147,7 @@ body {
 .card {
     background: var(--vp-c-card);
     border-radius: 15px;
-    box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px var(--vp-c-shadow);
 }
 
 .info {
@@ -125,6 +161,60 @@ body {
     flex-shrink: 0;
 }
 
+.info-full {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 90px;
+    margin-bottom: 4px;
+    padding: 12px 16px !important;
+}
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--vp-c-border);
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--vp-c-button);
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
 .theme-toggle {
     width: 32px;
     height: 32px;
@@ -133,7 +223,7 @@ body {
     border-radius: 50%;
     cursor: pointer;
     background: var(--vp-c-toggletheme);
-    box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px var(--vp-c-shadow);
     transition: 0.2s ease;
 }
 
@@ -152,7 +242,7 @@ body {
     background: var(--vp-c-button);
     color: var(--vp-c-button-text);
     border-radius: 15px;
-    box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px var(--vp-c-shadow);
 }
 
 button {
@@ -183,7 +273,7 @@ textarea {
     -ms-overflow-style: none; scrollbar-width: none;
     overflow-x: hidden; overflow-y: auto;
     color: var(--vp-c-text);
-    box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px var(--vp-c-shadow);
 }
 
 textarea::selection {
@@ -211,6 +301,7 @@ h2 {
 /* 机型信息卡片 */
 .device-info-section {
     width: 95%;
+    margin-top: 8px;
     margin-bottom: 16px;
 }
 
@@ -234,7 +325,7 @@ h2 {
     background: var(--vp-c-card);
     border-radius: 12px;
     padding: 12px;
-    box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px var(--vp-c-shadow);
 }
 
 .device-info-item.restore-button {
@@ -340,7 +431,7 @@ h2 {
     background: var(--vp-c-card);
     color: var(--vp-c-text);
     border-radius: 8px;
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 12px var(--vp-c-shadow);
     border-left: 4px solid var(--vp-c-button);
     font-size: 14px;
     max-width: 250px;

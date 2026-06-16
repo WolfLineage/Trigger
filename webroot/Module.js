@@ -1,6 +1,7 @@
 import { exec } from 'https://esm.sh/kernelsu';
 
 const CONGFIG_PATH = "/data/adb/.Magic/Trigger/kernel_config.txt";
+const BOOT_CONFIG_PATH = "/data/adb/.Magic/Trigger/boot_config.txt";
 const CUSTOM_MODULE_DIR = "/data/adb/.Magic/Trigger/custom_modules";
 const ORIGINAL_MODEL_FILE = "/data/adb/.Magic/Trigger/original_model.txt";
 
@@ -35,31 +36,64 @@ function showToast(message, isError = false) {
 }
 
 export async function loadConfig() {
-    const textarea = document.querySelector('textarea');
+    const textarea = document.querySelector('#config-page textarea');
+    if (!textarea) return;
     const { stdout } = await exec(`cat "${CONGFIG_PATH}" 2>/dev/null | base64 -w 0`);
     if (stdout?.trim()) {
         const decoded = decode(stdout.trim());
         if (decoded !== null) {
             textarea.value = decoded;
-            showToast('加载成功');
+            showToast('自启配置加载成功');
             return;
         }
     }
     textarea.value = '';
-    showToast('文件为空或不存在', true);
+    showToast('自启配置为空或不存在', true);
 }
 
 export async function saveConfig() {
-    const textarea = document.querySelector('textarea');
+    const textarea = document.querySelector('#config-page textarea');
+    if (!textarea) return;
     const content = textarea.value;
     if (!content.trim()) { showToast('内容不能为空', true); return; }
 
     const { stdout } = await exec(`mkdir -p "$(dirname ${CONGFIG_PATH})" && echo -n "${encode(content)}" | base64 -d > "${CONGFIG_PATH}" && echo OK`);
 
     if (stdout?.includes('OK')) {
-        showToast('保存成功');
+        showToast('自启配置保存成功');
     } else {
-        showToast('保存失败', true);
+        showToast('自启配置保存失败', true);
+    }
+}
+
+export async function loadBootConfig() {
+    const textarea = document.querySelector('#bootconfig-page textarea');
+    if (!textarea) return;
+    const { stdout } = await exec(`cat "${BOOT_CONFIG_PATH}" 2>/dev/null | base64 -w 0`);
+    if (stdout?.trim()) {
+        const decoded = decode(stdout.trim());
+        if (decoded !== null) {
+            textarea.value = decoded;
+            showToast('开机配置加载成功');
+            return;
+        }
+    }
+    textarea.value = '';
+    showToast('开机配置为空或不存在', true);
+}
+
+export async function saveBootConfig() {
+    const textarea = document.querySelector('#bootconfig-page textarea');
+    if (!textarea) return;
+    const content = textarea.value;
+    if (!content.trim()) { showToast('内容不能为空', true); return; }
+
+    const { stdout } = await exec(`mkdir -p "$(dirname ${BOOT_CONFIG_PATH})" && echo -n "${encode(content)}" | base64 -d > "${BOOT_CONFIG_PATH}" && echo OK`);
+
+    if (stdout?.includes('OK')) {
+        showToast('开机配置保存成功');
+    } else {
+        showToast('开机配置保存失败', true);
     }
 }
 
@@ -100,6 +134,60 @@ export async function getSerialNumber() {
     }
 }
 
+// 自启核心（keep_run.sh）状态管理
+export async function getCoreStatus() {
+    try {
+        const { stdout } = await exec(`pgrep -f keep_run.sh`);
+        return !!stdout?.trim();
+    } catch {
+        return false;
+    }
+}
+
+export async function toggleCore(action) {
+    try {
+        const scriptPath = "/data/adb/modules/Trigger/keep_run.sh";
+        if (action === 'stop' || action === 'restart') {
+            await exec(`pkill -f keep_run.sh`);
+            if (action === 'stop') return true;
+            await new Promise(r => setTimeout(r, 500));
+        }
+        await exec(`chmod 755 ${scriptPath} && nohup sh ${scriptPath} >/dev/null 2>&1 &`);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+// 开机自启管理（操作 post-fs-data.sh）
+const POST_FS_DATA = "/data/adb/modules/Trigger/post-fs-data.sh";
+
+export async function getBootStartStatus() {
+    try {
+        // 查找 [BOOT_CONTROL] 标记下的那行 exit 0
+        const { stdout } = await exec(`grep -A 1 "\\[BOOT_CONTROL\\]" "${POST_FS_DATA}" | tail -n 1`);
+        // 如果该行以 # 开头，说明 exit 0 被注释了，即：已启用自启
+        return stdout?.trim().startsWith('#');
+    } catch {
+        return false;
+    }
+}
+
+export async function toggleBootStart(enable) {
+    try {
+        if (enable) {
+            // 开启自启：注释掉 exit 0
+            await exec(`sed -i '/\\[BOOT_CONTROL\\]/{n;s/^exit 0/# exit 0/}' "${POST_FS_DATA}"`);
+        } else {
+            // 关闭自启：取消 exit 0 的注释
+            await exec(`sed -i '/\\[BOOT_CONTROL\\]/{n;s/^# exit 0/exit 0/}' "${POST_FS_DATA}"`);
+        }
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 // 获取当前应用的机型模块名称
 export async function getCurrentModuleName() {
     try {
@@ -111,7 +199,7 @@ export async function getCurrentModuleName() {
     }
 }
 
-// 获取原始机型（修复：优先从持久化文件读取）
+// 获取原始机型（优先从持久化文件读取）
 export async function getOriginalModel() {
     try {
         const { stdout } = await exec(`cat "${ORIGINAL_MODEL_FILE}" 2>/dev/null`);
