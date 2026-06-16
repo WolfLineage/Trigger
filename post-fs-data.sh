@@ -15,3 +15,5 @@ if [ -f "${SCRIPT_PATH}" ]; then
         nohup sh "${SCRIPT_PATH}" >/dev/null 2>&1 &
     fi
 fi
+
+

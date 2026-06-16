@@ -2,174 +2,8 @@
 <html lang="zh" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, 'segoe UI', sans-serif;
-        }
-
-        :root {
-            --vp-c-bg: #1a1a2e;
-            --vp-c-toggletheme: #16213e;
-            --vp-c-text: #81C784;
-            --vp-c-header: #1a1a2e;
-            --vp-c-card: #16213e;
-            --vp-c-border: #0f3460;
-            --vp-c-button: #80c583;
-            --vp-c-button-text: #ffffff;
-            --vp-c-textarea: #0F346080;
-        }
-        
-        [data-theme="light"] {
-            --vp-c-bg: #ffffff;
-            --vp-c-toggletheme: #f8f9faff;
-            --vp-c-text: #4CAF50;
-            --vp-c-header: #ffffff;
-            --vp-c-card: #f8f9fa;
-            --vp-c-border: #a0adbb;
-            --vp-c-button: #388e3c;
-            --vp-c-textarea: #eceff2;
-        }
-        
-        body {
-            display: flex;
-            justify-content: center;
-            width: 100svw;
-            height: 100svh;
-            background: var(--vp-c-bg);
-            color: var(--vp-c-text);
-        }
-        
-        .header {
-            position: fixed;
-            display: flex;
-            justify-content: space-between;
-            width: 100svw;
-            height: 48px;
-            z-index: 1000;
-            background: var(--vp-c-header);
-            border-bottom: 1px solid var(--vp-c-border);
-        }
-        
-        .topnav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute; top: 56px;
-            width: 95%;
-            height: 36px;
-            background: var(--vp-c-card);
-            border-radius: 15px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-        }
-        
-        .main {
-            position: absolute; top: 108px;
-            display: flex; flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-width: 200px;
-            width: 95%;
-            min-height: 50px;
-        }
-
-        .footer {
-            position: absolute; top: 70%;
-            display: flex;
-            flex-wrap: wrap;
-            width: 95%;
-            height: 33%;
-            gap: 8px;
-        }
-        
-        .card {
-            background: var(--vp-c-card);
-            border-radius: 15px;
-            box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
-        }
-        
-        .info {
-            padding: 4px;
-            width: 64px;
-            height: 64px;
-        }
-        
-        .theme-toggle {
-            width: 32px;
-            height: 32px;
-            margin-top: 8px; margin-right: 8px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            background: var(--vp-c-toggletheme);
-            box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
-            transition: 0.2s ease;
-        }
-        
-        .theme-toggle:hover {
-            scale: 1.05;
-        }
-        
-        .theme-toggle:active {
-            scale: 1.03;
-        }
-        
-        .plugin-buttons {
-            padding: 4px;
-            margin-bottom: 2.5%;
-            width: 49%;
-            background: var(--vp-c-button);
-            color: var(--vp-c-button-text);
-            border-radius: 15px;
-            box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
-        }
-        
-        button {
-            outline: none;
-            border: none;
-            transition: 0.2s ease;
-        }
-        
-        button:hover {
-            scale: 1.05;
-        }
-        
-        button:active {
-            scale: 1.03;
-        }
-        
-        textarea {
-            resize: none;
-            padding: 8px;
-            width: 95%;
-            height: 40vh;
-            margin-top: 8px; margin-bottom: 8px;
-            outline: none;
-            border: none;
-            border-radius: 15px;
-            background: var(--vp-c-textarea);
-            -ms-overflow-style: none; scrollbar-width: none;
-            overflow-x: hidden; overflow-y: auto;
-            color: var(--vp-c-text);
-            box-shadow: 0 0 8px rgb(0, 0, 0, 0.4);
-        }
-        
-        textarea::selection {
-            color: #2c3e50;
-            background: #adb5bd;
-        }
-        
-        a {
-            display: block;
-            margin-left: 4px; margin-right: 4px;
-            text-decoration: none;
-            color: var(--vp-c-text);
-            cursor: pointer;
-        }
-    </style>
+    <title>Trigger - 内核配置管理</title>
+    <link rel="stylesheet" href="Style.css">
 </head>
 <body>
     <div class="header">
@@ -177,84 +11,72 @@
         <button class="theme-toggle" onclick="toggleTheme()">☀️️</button>
     </div>
     <div class="topnav">
-        <a href="#">Home</a>
-        <a href="#">Plugin</a>
-        <a href="#">About</a>
+        <a href="#" onclick="switchPage('config')">配置</a>
+        <a href="#" onclick="switchPage('changebox')">改机型</a>
+        <a href="#" onclick="switchPage('about')">关于</a>
     </div>
-    <div class="main card">
-        <h2>-Plugin-</h2>
-        <textarea placeholder="Plugin Here"></textarea>
-        <div style=" display: flex; justify-content: space-between; width: 95%;">
-            <button class="plugin-buttons" onclick="loadConfig()">Load</button>
-            <button class="plugin-buttons" onclick="saveConfig()">Save</button>
+
+    <!-- 配置页面 -->
+    <div id="config-page" class="page-content active">
+        <div class="main card">
+            <h2>-配置编辑-</h2>
+            <textarea placeholder="输入配置内容..."></textarea>
+            <div style=" display: flex; justify-content: space-between; width: 95%;">
+                <button class="plugin-buttons">加载</button>
+                <button class="plugin-buttons">保存</button>
+            </div>
+        </div>
+        <div class="footer">
+            <div id="battery-card" class="info card">电池信息</div>
+            <div id="brand-card" class="info card">设备品牌</div>
+            <div id="fingerprint-card" class="info card">设备指纹</div>
+            <div id="sn-card" class="info card">序列号</div>
         </div>
     </div>
-<!--    <div class="footer">-->
-<!--        <div class="info card">Battery Info</div>-->
-<!--        <div class="info card">Phone Brand</div>-->
-<!--        <div class="info card">Finger Print</div>-->
-<!--        <div class="info card">SSAID</div>-->
-<!--    </div>-->
 
-    <script>
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            document.querySelector('.theme-toggle').textContent = next === 'dark' ? '☀️' : '🌙';
-        }
-        (function() {
-            const saved = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', saved);
-            document.querySelector('.theme-toggle').textContent = saved === 'dark' ? '☀️' : '🌙';
-        })();
-    </script>
+    <!-- 改机型页面 -->
+    <div id="changebox-page" class="page-content">
+        <div class="device-info-section">
+            <div class="device-info card">
+                <div class="device-info-row">
+                    <div class="device-info-item" id="current-model-item">
+                        <div class="info-label">当前机型</div>
+                        <div id="current-model" class="info-value">加载中...</div>
+                    </div>
+                    <div class="device-info-item restore-button" id="original-model-item" onclick="window.restoreDevice?.()">
+                        <div class="info-label">原始机型（点击还原）</div>
+                        <div id="original-model" class="info-value">加载中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script type="module">
-        import { exec, toast } from 'https://esm.sh/kernelsu';
+        <div class="main card module-list-container">
+            <h2>-选择机型模块-</h2>
+            <div id="module-list" class="module-list">
+                <div class="loading-tip">扫描中...</div>
+            </div>
+        </div>
+    </div>
 
-        const CONFIG_PATH = "/data/adb/.Magic/Trigger/kernel_config.txt";
-        const textarea = document.querySelector('textarea');
+    <!-- 关于页面 -->
+    <div id="about-page" class="page-content">
+        <div class="main card">
+            <h2>-关于Trigger-</h2>
+            <div style="padding: 20px; text-align: center;">
+                <p style="margin-bottom: 10px;">Trigger - 内核配置管理工具</p>
+                <p style="font-size: 14px; line-height: 1.8;">
+                    多功能模块，管理系统属性配置和机型设置。<br/>
+                    支持自定义机型模块加载，ColorOS效果最佳。<br/>
+                    QQ群:690837385  作者:Vorthas
+                </p>
+                <img src="Reward.jpg" style="width: 300px">
+                <p style="font-size: 10px; color: rgba(128, 197, 131, 0.7);">本项目完全开源，二改请声明来源，商用请向作者提出申请，违者追究法律责任，使用则默认同意。</p>
+            </div>
+        </div>
+    </div>
 
-        // Base64 编解码
-        const encode = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
-        const decode = base64 => {
-            try {
-                const binary = atob(base64.trim());
-                return new TextDecoder().decode(new Uint8Array([...binary].map(c => c.charCodeAt(0))));
-            } catch { return null; }
-        };
-
-        window.loadConfig = async () => {
-            const { stdout } = await exec(`cat "${CONFIG_PATH}" 2>/dev/null | base64 -w 0`);
-            if (stdout?.trim()) {
-                const decoded = decode(stdout.trim());
-                if (decoded !== null) {
-                    textarea.value = decoded;
-                    toast('加载成功');
-                    return;
-                }
-            }
-            textarea.value = '';
-            toast('文件为空或不存在');
-        };
-
-        window.saveConfig = async () => {
-            const content = textarea.value;
-            if (!content.trim()) { toast('内容不能为空', true); return; }
-
-            const { stdout } = await exec(`mkdir -p "$(dirname ${CONFIG_PATH})" && echo -n "${encode(content)}" | base64 -d > "${CONFIG_PATH}" && echo OK`);
-
-            if (stdout?.includes('OK')) {
-                toast('保存成功');
-            } else {
-                toast('保存失败', true);
-            }
-        };
-
-        // 页面加载时自动读取
-        window.addEventListener('DOMContentLoaded', loadConfig);
-    </script>
+    <script src="Script.js"></script>
+    <script type="module" src="Module.js"></script>
 </body>
 </html>
